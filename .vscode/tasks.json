@@ -1,0 +1,105 @@
+{
+	"version": "2.0.0",
+	"windows": {
+		"options": {
+			"shell": {
+				"executable": "cmd.exe",
+				"args": [
+					"/C",
+					// The path to VsDevCmd.bat depends on the version of Visual Studio you have installed.
+					"\"C:/Program Files (x86)/Microsoft Visual Studio/2019/BuildTools/Common7/Tools/VsDevCmd.bat\"",
+					"&&"
+				]
+			}
+		}
+	},
+	"tasks": [
+		{
+			"type": "shell",
+			"label": "Build Client",
+			"command": "cl.exe",
+			"args": [
+				"/EHsc",
+				"/nologo",
+				"/Fe:",
+				"client.exe",
+				"client.cpp"
+			],
+			"problemMatcher": [
+				"$msCompile"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"detail": "compiler: cl.exe"
+		},
+		{
+			"type": "shell",
+			"label": "Build Server",
+			"command": "cl.exe",
+			"args": [
+				"/EHsc",
+				"/nologo",
+				"/Fe:",
+				"server.exe",
+				"server.cpp"
+			],
+			"problemMatcher": [
+				"$msCompile"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"detail": "compiler: cl.exe"
+		},
+		{
+			"type": "shell",
+			"label": "Run Server",
+			"command": "server.exe",
+			"problemMatcher": [
+				"$msCompile"
+			],
+			"group": {
+				"kind": "test",
+				"isDefault": true
+			},
+			"detail": "test: client.exe"
+		},
+		{
+			"type": "shell",
+			"label": "Run Client on localhost",
+			"command": "client.exe 127.0.0.1",
+			"problemMatcher": [
+				"$msCompile"
+			],
+			"group": {
+				"kind": "test",
+				"isDefault": true
+			},
+			"detail": "test: client.exe"
+		},
+		{
+			"type": "shell",
+			"label": "Run Client on custom IP",
+			"command": "client.exe ${input:IP}",
+			"problemMatcher": [
+				"$msCompile"
+			],
+			"group": {
+				"kind": "test",
+				"isDefault": true
+			},
+			"detail": "test: client.exe"
+		}
+	],
+    "inputs": [
+        {
+            "id": "IP",
+            "description": "IP to connect client to server:",
+            "default": "192.168.1.1",
+            "type": "promptString"
+        },
+    ]
+}
